@@ -122,7 +122,7 @@ input[type='text']:focus {
 #unmatched,
 #matched,
 #empty-pin,
-#empty-input-display,
+#input-error,
 #help-text {
     display: none;
 }

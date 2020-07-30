@@ -17,7 +17,6 @@ function getUserDisplay() {
 // Update user input display:
 function printUserDisplay(num) {
   document.getElementById('input-display').value = num;
-
 }
 
 // show clicked number
@@ -34,6 +33,7 @@ function userInput() {
 }
 
 // capture clicked number
+
 let numberBtn = document.getElementsByClassName('number');
 for (let i = 0; i < numberBtn.length; i++) {
   numberBtn[i].addEventListener('click', userInput);
@@ -66,35 +66,39 @@ function handleSubmit() {
   const pinGenerated = document.getElementById('pin-display').value;
   const userEntered = getUserDisplay();
 
-  if (pinGenerated == '' && userEntered == '') { // both display empty
+  if (pinGenerated == '' && userEntered == '') {
+    // both display empty
     alertNotification('empty-pin');
-  } else if (pinGenerated == '') { // pin display empty
+
+  } else if (pinGenerated == '') {
+    // pin display empty
     alertNotification('empty-pin');
-  } else if (userEntered == '') { // user input display empty
-    alertNotification('emptyInputDisplay');
+
+  } else if (userEntered == '' || userEntered.length < 4) {
+    // user input display empty or less than 4 digit
+    alertNotification('inputError');
+
   } else if (pinGenerated == userEntered) {
     //Success Alert
     alertNotification('success');
   } else {
     // Failed Alert
     alertNotification('failed');
+
     // call count left function:
     leftRemainder();
-
   }
-
 }
 
 // Count left remainder with disable submit and generate pin button:
 function leftRemainder() {
-  let countLeft = parseInt(document.getElementById("count-left").innerText);
+  let countLeft = parseInt(document.getElementById('count-left').innerText);
   countLeft = countLeft - 1;
-  document.getElementById("count-left").innerText = countLeft;
+  document.getElementById('count-left').innerText = countLeft;
   if (countLeft == 0) {
-    document.getElementById("submit-btn").disabled = true;
-    document.getElementById("generate-pin-btn").disabled = true;
+    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('generate-pin-btn').disabled = true;
     alertNotification('helpText');
-
   }
 }
 
@@ -110,7 +114,7 @@ function alertNotification(alertType) {
       allAlert('empty-pin', 'none');
       allAlert('matched', 'block');
       allAlert('unmatched', 'none');
-      allAlert('empty-input-display', 'none');
+      allAlert('input-error', 'none');
       allAlert('help-text', 'none');
       break;
 
@@ -118,7 +122,7 @@ function alertNotification(alertType) {
       allAlert('empty-pin', 'none');
       allAlert('matched', 'none');
       allAlert('unmatched', 'block');
-      allAlert('empty-input-display', 'none');
+      allAlert('input-error', 'none');
       allAlert('help-text', 'none');
 
       break;
@@ -126,15 +130,15 @@ function alertNotification(alertType) {
       allAlert('empty-pin', 'block');
       allAlert('matched', 'none');
       allAlert('unmatched', 'none');
-      allAlert('empty-input-display', 'none');
+      allAlert('input-error', 'none');
       allAlert('help-text', 'none');
       break;
 
-    case 'emptyInputDisplay':
+    case 'inputError':
       allAlert('empty-pin', 'none');
       allAlert('matched', 'none');
       allAlert('unmatched', 'none');
-      allAlert('empty-input-display', 'block');
+      allAlert('input-error', 'block');
       allAlert('help-text', 'none');
 
       break;
@@ -143,7 +147,7 @@ function alertNotification(alertType) {
       allAlert('empty-pin', 'none');
       allAlert('matched', 'none');
       allAlert('unmatched', 'none');
-      allAlert('empty-input-display', 'none');
+      allAlert('input-error', 'none');
       allAlert('help-text', 'none');
       break;
 
@@ -151,22 +155,18 @@ function alertNotification(alertType) {
       allAlert('empty-pin', 'none');
       allAlert('matched', 'none');
       allAlert('unmatched', 'none');
-      allAlert('empty-input-display', 'none');
+      allAlert('input-error', 'none');
       allAlert('help-text', 'block');
       break;
   }
 }
 
 
+
 // Disable keyboard entry:
 document.onkeydown = function (e) {
   return false;
 };
-
-
-
-
-
 
 // function allAlert(successId, successValue, failedId, failedValue) {
 //   document.getElementById(successId).style.display = successValue;
