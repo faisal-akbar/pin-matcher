@@ -5,8 +5,9 @@ document.getElementById('generate-pin-btn').addEventListener('click', function (
 
   // set user input display empty when generateBtn is clicked
   document.getElementById('input-display').value = '';
-  // Clear all notification every time generateBtn is clicked:
-  alertNotification('clearNotification');
+
+  // Clear Success alert every time the generate button is clicked if there any success notification
+  alertNotification('matched', 'none');
 });
 
 // Get output from the user input display:
@@ -25,7 +26,7 @@ function userInput() {
   if (output != NaN) {
     //if output is a number
     output = output + this.id;
-    // if number is maximum 4 digit
+    // if number is maximum 4 digit number
     if (output.length < 5) {
       printUserDisplay(output);
     }
@@ -33,7 +34,6 @@ function userInput() {
 }
 
 // capture clicked number
-
 let numberBtn = document.getElementsByClassName('number');
 for (let i = 0; i < numberBtn.length; i++) {
   numberBtn[i].addEventListener('click', userInput);
@@ -45,8 +45,10 @@ for (let i = 0; i < deleteBtn.length; i++) {
   deleteBtn[i].addEventListener('click', function () {
     if (this.id == 'clear-all') {
       printUserDisplay('');
-      // Remove alert every time clear button is being clicked:
-      alertNotification('clearNotification');
+
+      // Clear Success alert every time the < button is clicked
+      alertNotification('matched', 'none');
+
     }
     if (this.id == 'backspace') {
       let output = getUserDisplay().toString();
@@ -54,8 +56,8 @@ for (let i = 0; i < deleteBtn.length; i++) {
         //if output has a value
         output = output.substr(0, output.length - 1);
         printUserDisplay(output);
-        // Remove alert every time backspace is being clicked:
-        alertNotification('clearNotification');
+        // Clear Success alert every time the backspace button is clicked
+        alertNotification('matched', 'none');
       }
     }
   });
@@ -68,22 +70,27 @@ function handleSubmit() {
 
   if (pinGenerated == '' && userEntered == '') {
     // both display empty
-    alertNotification('empty-pin');
+    alertNotification('empty-pin', 'block');
+    // set time out for notification
+    setTimeout(autoClear, 3000);
 
   } else if (pinGenerated == '') {
     // pin display empty
-    alertNotification('empty-pin');
+    alertNotification('empty-pin', 'block');
+    setTimeout(autoClear, 3000);
 
   } else if (userEntered == '' || userEntered.length < 4) {
     // user input display empty or less than 4 digit
-    alertNotification('inputError');
+    alertNotification('input-error', 'block');
+    setTimeout(autoClear, 3000);
 
   } else if (pinGenerated == userEntered) {
     //Success Alert
-    alertNotification('success');
+    alertNotification('matched', 'block');
   } else {
     // Failed Alert
-    alertNotification('failed');
+    alertNotification('unmatched', 'block');
+    setTimeout(autoClear, 3000);
 
     // call count left function:
     leftRemainder();
@@ -98,75 +105,40 @@ function leftRemainder() {
   if (countLeft == 0) {
     document.getElementById('submit-btn').disabled = true;
     document.getElementById('generate-pin-btn').disabled = true;
-    alertNotification('helpText');
+    // help text when no more action left:
+    alertNotification('help-text', 'block');
+    alertNotification('unmatched', 'none');
   }
 }
 
-// Success, Failed, empty pin, empty user input display, clear notification,
-// and help text when time out notification alert Actions:
-function allAlert(Id, value) {
+// Success, Failed, empty pin, user input issue, clear notification,
+function alertNotification(Id, value) {
   document.getElementById(Id).style.display = value;
 }
-// All  notification type:
-function alertNotification(alertType) {
-  switch (alertType) {
-    case 'success':
-      allAlert('empty-pin', 'none');
-      allAlert('matched', 'block');
-      allAlert('unmatched', 'none');
-      allAlert('input-error', 'none');
-      allAlert('help-text', 'none');
-      break;
 
-    case 'failed':
-      allAlert('empty-pin', 'none');
-      allAlert('matched', 'none');
-      allAlert('unmatched', 'block');
-      allAlert('input-error', 'none');
-      allAlert('help-text', 'none');
-
-      break;
-    case 'empty-pin':
-      allAlert('empty-pin', 'block');
-      allAlert('matched', 'none');
-      allAlert('unmatched', 'none');
-      allAlert('input-error', 'none');
-      allAlert('help-text', 'none');
-      break;
-
-    case 'inputError':
-      allAlert('empty-pin', 'none');
-      allAlert('matched', 'none');
-      allAlert('unmatched', 'none');
-      allAlert('input-error', 'block');
-      allAlert('help-text', 'none');
-
-      break;
-
-    case 'clearNotification':
-      allAlert('empty-pin', 'none');
-      allAlert('matched', 'none');
-      allAlert('unmatched', 'none');
-      allAlert('input-error', 'none');
-      allAlert('help-text', 'none');
-      break;
-
-    case 'helpText':
-      allAlert('empty-pin', 'none');
-      allAlert('matched', 'none');
-      allAlert('unmatched', 'none');
-      allAlert('input-error', 'none');
-      allAlert('help-text', 'block');
-      break;
-  }
+// auto clear notification used using set time out
+function autoClear() {
+  alertNotification('empty-pin', 'none');
+  alertNotification('input-error', 'none');
+  alertNotification('unmatched', 'none');
+  // alertNotification('matched', 'none');
+  //alertNotification('help-text', 'none');
 }
-
 
 
 // Disable keyboard entry:
 document.onkeydown = function (e) {
   return false;
 };
+
+
+
+
+
+
+
+
+
 
 // function allAlert(successId, successValue, failedId, failedValue) {
 //   document.getElementById(successId).style.display = successValue;
