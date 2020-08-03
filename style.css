@@ -117,8 +117,7 @@ input[type='text']:focus {
 }
 
 
-/* Hide notify alert */
-
+/* Hide notification alert */
 #unmatched,
 #matched,
 #empty-pin,
